@@ -1,0 +1,56 @@
+buildscript {
+    repositories {
+        mavenCentral()
+        // jcenter()
+    }
+
+    dependencies {
+	// Per http://mvnrepository.com/artifact/com.android.tools.build/gradle/
+        classpath 'com.android.tools.build:gradle:1.1+'
+    }
+}
+
+allprojects {
+    gradle.projectsEvaluated {
+        tasks.withType(JavaCompile) {
+            options.compilerArgs << "-Xlint:deprecation"
+        }
+    }
+}
+
+apply plugin: 'com.android.application'
+
+repositories {
+    mavenCentral()
+}
+
+dependencies {
+    compile 'com.google.android:support-v4:r7'
+    compile 'net.sf.jwordnet:jwnl:1.4_rc3'
+    compile 'org.apache.opennlp:opennlp:1.5.3'
+}
+
+android {
+    // Per whatever version dir is found in: /path/to/adt-bundle-linux-x86_64/sdk/build-tools/
+    buildToolsVersion "22.0.1"
+
+    // Per whatever dirs are found in: /path/to/android-sdk-linux/platforms
+    compileSdkVersion 21 // 5.0
+    
+     sourceSets {
+        main {
+            manifest.srcFile 'AndroidManifest.xml'
+            java.srcDirs = ['src']
+            resources.srcDirs = ['src']
+            aidl.srcDirs = ['src']
+            renderscript.srcDirs = ['src']
+            res.srcDirs = ['res']
+            assets.srcDirs = ['assets']
+        }
+
+        instrumentTest.setRoot('tests')
+    }
+    lintOptions {
+          abortOnError false
+    }
+} 
